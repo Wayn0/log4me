@@ -1,6 +1,6 @@
 {
   "name": "log4me",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "A logger that only does 1 style of logging",
   "main": "index.js",
   "scripts": {

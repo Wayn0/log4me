@@ -17,7 +17,12 @@ var logLevel = 5;
 
 function log(message, level) {
 	if (level <= logLevel) {
-		var text = getHeader(level) + message + "\n";
+		console.log(typeof message);
+		if(typeof message === "string") {
+			var text = getHeader(level) + message + "\n";
+		} else if(typeof message === "object") {
+			var text = getHeader(level) + JSON.stringify(message) + "\n";
+		}
 		writeLine(text);
 	}
 }
