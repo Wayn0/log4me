@@ -30,9 +30,9 @@ function writeLine(text) {
 	var file = "./logs/log_" + dayString + ".log";
 	fs.access(path, fs.F_OK, (err) => {
 		if (err) {
-			console.error(err)
 			console.error("Please make sure you have a writable ./logs directory");
-			return
+			throw err;
+			
 		} else {
 
 			fs.access(path, fs.F_OK, (err) => {
@@ -83,6 +83,21 @@ function getHeader(level) {
 	}
 }
 
+function setLevel(level) {
+
+	if(level == 'fatal' || level == 'FATAL' || level == 1) {
+		logLevel = FATAL;
+	} else if (level == 'error' || level == 'ERROR' || level == 2) {
+		logLevel = ERROR;
+	} else if (level == 'warn' || level == 'WARN' || level == 3) {
+		logLevel = WARN;
+	} else if (level == 'info' || level == 'INFO' || level == 4) {
+		logLevel = INFO;
+	} else {
+		logLevel = DEBUG;
+	}
+}
+
 function fatal(message) {
 	log(message,FATAL);
 }
@@ -104,5 +119,6 @@ module.exports = {
 	error,
 	warn,
 	info,
-	debug
+	debug,
+	setLevel
 };
