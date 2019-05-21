@@ -31,11 +31,11 @@ function writeLine(text) {
 
 	const fs = require('fs')
 	var dayString = new Date().toISOString().substring(0,10);
-	var path = "./logs";
-	var file = "./logs/log_" + dayString + ".log";
+	var path = "./log";
+	var file = "./log/log_" + dayString + ".log";
 	fs.access(path, fs.F_OK, (err) => {
 		if (err) {
-			console.error("Please make sure you have a writable ./logs directory");
+			console.error("Please make sure you have a writable ./log directory");
 			throw err;
 			
 		} else {
