@@ -1,6 +1,12 @@
 # log4me
 A very simple node js logger that does only one style of logging
 
+## Installation
+```
+$ npm install --save log4me
+$ mkdir log
+```
+
 ## Usage
 ```
 var log = require('log4me');
