@@ -3,10 +3,10 @@ A very simple node js logger that does only one style of logging
 
 ## Usage
 ```
-var log = require('./index.js');
+var log = require('log4me');
 
 log.debug("HELLO BOB");
-log.fatal("Oh FOK");
+log.fatal("BIG PROBLEM");
 log.error("DAMN");
 log.setLevel('fatal');
 log.warn("Careful");
