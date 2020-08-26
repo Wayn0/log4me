@@ -15,6 +15,7 @@ const DEBUG = 5;
 var logLevel = 5;
 var path     = "./log";
 var prefix   = "log_";
+var fileName = "";
 
 
 function log(message, level) {
@@ -33,7 +34,7 @@ function writeLine(text) {
 	const fs = require('fs')
 	var date = new Date();
 	var dayString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().substring(0,10);
-	var file = path + "/" + prefix + dayString + ".log";
+	fileName = path + "/" + prefix + dayString + ".log";
 	fs.access(path, fs.F_OK, (err) => {
 		if (err) {
 			console.error("Please make sure you have a writable " + path + " directory");
@@ -43,12 +44,12 @@ function writeLine(text) {
 
 			fs.access(path, fs.F_OK, (err) => {
 				if (err) {
-					fs.writeFile(file, text, function (err, file) {
+					fs.writeFile(file, text, function (err) {
 						if (err) throw err;
 					});
 				} else {
 
-					fs.appendFile(file,text,'utf8',
+					fs.appendFile(fileName,text,'utf8',
 					// callback function
 						function(err) { 
 						if (err) throw err;
@@ -105,6 +106,10 @@ function setLevel(level) {
 	}
 }
 
+function getFileName() {
+	return fileName;
+}
+
 function setPath(newPath) {
 	path = newPath;
 }
@@ -135,6 +140,8 @@ module.exports = {
 	warn,
 	info,
 	debug,
+	getFileName,
 	setLevel,
+	setPrefix,
 	setPath
 };
