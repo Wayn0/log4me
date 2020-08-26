@@ -14,6 +14,7 @@ const DEBUG = 5;
 
 var logLevel = 5;
 var path     = "./log";
+var prefix   = "log_";
 
 
 function log(message, level) {
@@ -32,7 +33,7 @@ function writeLine(text) {
 	const fs = require('fs')
 	var date = new Date();
 	var dayString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().substring(0,10);
-	var file = path + "/log_" + dayString + ".log";
+	var file = path + "/" + prefix + dayString + ".log";
 	fs.access(path, fs.F_OK, (err) => {
 		if (err) {
 			console.error("Please make sure you have a writable " + path + " directory");
@@ -106,6 +107,10 @@ function setLevel(level) {
 
 function setPath(newPath) {
 	path = newPath;
+}
+
+function setPrefix(newPrefix) {
+	prefix = newPrefix;
 }
 
 function fatal(message) {
