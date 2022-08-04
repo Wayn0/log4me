@@ -12,18 +12,19 @@ const WARN  = 3;
 const INFO  = 4
 const DEBUG = 5;
 
-var logLevel = 5;
-var path     = "./log";
-var prefix   = "log_";
-var fileName = "";
+let logLevel = 5;
+let path     = "./log";
+let prefix   = "log_";
+let fileName = "";
 
 
 function log(message, level) {
 	if (level <= logLevel) {
+		let text = ""
 		if(typeof message === "string") {
-			var text = getHeader(level) + message + "\n";
+			text = getPrefix(level) + message + "\n";
 		} else if(typeof message === "object") {
-			var text = getHeader(level) + JSON.stringify(message) + "\n";
+			text = getPrefix(level) + JSON.stringify(message) + "\n";
 		}
 		writeLine(text);
 	}
@@ -32,35 +33,39 @@ function log(message, level) {
 function writeLine(text) {
 
 	const fs = require('fs')
-	var date = new Date();
-	var dayString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().substring(0,10);
-	fileName = path + "/" + prefix + dayString + ".log";
-	fs.access(path, fs.F_OK, (err) => {
-		if (err) {
-			console.error("Please make sure you have a writable " + path + " directory");
-			throw err;
-			
-		} else {
-
-			fs.access(path, fs.F_OK, (err) => {
-				if (err) {
-					fs.writeFile(file, text, function (err) {
-						if (err) throw err;
-					});
-				} else {
-
-					fs.appendFile(fileName,text,'utf8',
-					// callback function
-						function(err) { 
-						if (err) throw err;
-					});
-				}
-			});
-		}
-	});
+	let date = new Date();
+	let dayString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().substring(0,10);
+	if(path == "stdout") {
+		console.log(text)
+	} else {
+		fileName = path + "/" + prefix + dayString + ".log";
+		fs.access(path, fs.F_OK, (err) => {
+			if (err) {
+				console.error("Please make sure you have a writable " + path + " directory");
+				throw err;
+				
+			} else {
+	
+				fs.access(path, fs.F_OK, (err) => {
+					if (err) {
+						fs.writeFile(file, text, function (err) {
+							if (err) throw err;
+						});
+					} else {
+	
+						fs.appendFile(fileName,text,'utf8',
+						// callback function
+							function(err) { 
+							if (err) throw err;
+						});
+					}
+				});
+			}
+		});
+	}
 }
 
-function getHeader(level) {
+function getPrefix(level) {
 	var d  = new Date();
 	var ts = new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().replace(/T/, ' ').replace(/\..+/, '');
 	
