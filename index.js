@@ -36,7 +36,10 @@ function writeLine(text) {
 	let date = new Date();
 	let dayString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().substring(0,10);
 	if(path == "stdout") {
-		console.log(text.trim())
+		if(logLevel < WARN)
+			console.error(text.trim())
+		else
+			console.log(text.trim())
 	} else {
 		fileName = path + "/" + prefix + dayString + ".log";
 		fs.access(path, fs.F_OK, (err) => {
