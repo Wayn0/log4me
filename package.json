@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/Wayn0/log4me#readme",
   "devDependencies": {
-    "mocha": "^9.1.4"
+    "mocha": "^11.1.0"
   }
 }
