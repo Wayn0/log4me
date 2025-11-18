@@ -1,6 +1,6 @@
 {
   "name": "log4me",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "A logger that only does 1 style of logging",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/Wayn0/log4me#readme",
   "devDependencies": {
-    "mocha": "^11.1.0"
+    "mocha": "^11.0.0"
   }
 }
