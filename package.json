@@ -21,7 +21,10 @@
     "url": "https://github.com/Wayn0/log4me/issues"
   },
   "homepage": "https://github.com/Wayn0/log4me#readme",
-  "devDependencies": {
-    "mocha": "^11.0.0"
-  }
+  "dependencies": {
+    "serialize-javascript": "^7.0.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }  
 }
