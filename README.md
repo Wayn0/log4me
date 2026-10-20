@@ -4,8 +4,8 @@ A very simple node js logger that does only one style of logging
 ## Installation
 ```
 $ npm install --save log4me
-$ mkdir log
 ```
+The log directory (`./log` by default) is created automatically on first use.
 
 ## Usage
 ```

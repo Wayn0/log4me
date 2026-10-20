@@ -5,95 +5,73 @@
  * @created: 17/05/2019 12:12:12
  */
 
+const fs = require("fs");
 
 const FATAL = 1;
 const ERROR = 2;
 const WARN  = 3;
-const INFO  = 4
+const INFO  = 4;
 const DEBUG = 5;
 
-let logLevel = 5;
+let logLevel = DEBUG;
 let path     = "./log";
 let prefix   = "log_";
 let fileName = "";
 
 
 function log(message, level) {
-	if (level <= logLevel) {
-		let text = ""
-		if(typeof message === "string") {
-			text = getPrefix(level) + message + "\n";
-		} else if(typeof message === "object") {
-			text = getPrefix(level) + JSON.stringify(message) + "\n";
-		}
-		writeLine(text);
+	if (level > logLevel) {
+		return;
 	}
+	let now   = new Date();
+	let local = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+	writeLine(getPrefix(local, level) + format(message) + "\n", level, local);
 }
 
-function writeLine(text) {
+function format(message) {
+	if (typeof message === "string") {
+		return message;
+	}
+	if (message !== null && typeof message === "object") {
+		return JSON.stringify(message);
+	}
+	return String(message);
+}
 
-	const fs = require('fs')
-	let date = new Date();
-	let dayString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().substring(0,10);
-	if(path == "stdout") {
-		if(logLevel < WARN)
-			console.error(text.trim())
+function writeLine(text, level, local) {
+	if (path == "stdout") {
+		fileName = "";
+		if (level < WARN)
+			console.error(text.trim());
 		else
-			console.log(text.trim())
-	} else {
-		fileName = path + "/" + prefix + dayString + ".log";
-		fs.access(path, fs.F_OK, (err) => {
-			if (err) {
-				console.error("Please make sure you have a writable " + path + " directory");
-				throw err;
-				
-			} else {
-	
-				fs.access(path, fs.F_OK, (err) => {
-					if (err) {
-						fs.writeFile(file, text, function (err) {
-							if (err) throw err;
-						});
-					} else {
-	
-						fs.appendFile(fileName,text,'utf8',
-						// callback function
-							function(err) { 
-							if (err) throw err;
-						});
-					}
-				});
-			}
-		});
+			console.log(text.trim());
+		return;
+	}
+
+	fileName = path + "/" + prefix + local.toISOString().substring(0, 10) + ".log";
+	try {
+		fs.mkdirSync(path, { recursive: true });
+		fs.appendFileSync(fileName, text, "utf8");
+	} catch (err) {
+		fileName = "";
+		console.error("log4me: could not write to " + path + ": " + err.message);
 	}
 }
 
-function getPrefix(level) {
-	var d  = new Date();
-	var ts = new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().replace(/T/, ' ').replace(/\..+/, '');
-	
-	switch(level) {
+function getPrefix(local, level) {
+	let ts = local.toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
+	switch (level) {
 		case FATAL:
 			return ts + ' - FATAL - ';
-			break;
-
 		case ERROR:
 			return ts + ' - ERROR - ';
-			break;
-
 		case WARN:
 			return ts + ' - WARN  - ';
-			break;
-
 		case INFO:
 			return ts + ' - INFO  - ';
-			break;
-
 		case DEBUG:
 			return ts + ' - DEBUG - ';
-			break;
-
 		default:
 			return ts + ' - DEBUG - ';
 	}
@@ -101,7 +79,7 @@ function getPrefix(level) {
 
 function setLevel(level) {
 
-	if(level == 'fatal' || level == 'FATAL' || level == 1) {
+	if (level == 'fatal' || level == 'FATAL' || level == 1) {
 		logLevel = FATAL;
 	} else if (level == 'error' || level == 'ERROR' || level == 2) {
 		logLevel = ERROR;
@@ -127,19 +105,19 @@ function setPrefix(newPrefix) {
 }
 
 function fatal(message) {
-	log(message,FATAL);
+	log(message, FATAL);
 }
 function error(message) {
-	log(message,ERROR);
+	log(message, ERROR);
 }
 function warn(message) {
-	log(message,WARN);
+	log(message, WARN);
 }
 function info(message) {
-	log(message,INFO);
+	log(message, INFO);
 }
 function debug(message) {
-	log(message,DEBUG);
+	log(message, DEBUG);
 }
 
 module.exports = {
